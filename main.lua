@@ -36,9 +36,9 @@ end)
 local function addPlayerEsp(player)
 	coroutine.wrap(function(plr)
 		plr.CharacterAdded:Wait()
-		if not plr.Character:FindFirstChild("ESPHighlight") then
+		if not plr.Character:FindFirstChild("ESP") then
 			local highlight = Instance.new("Highlight")
-			highlight.Name = "ESPHighlight"
+			highlight.Name = "ESP"
 			highlight.OutlineTransparency = 0
 			highlight.OutlineColor = Color3.fromRGB(255,255,255)
 			highlight.FillTransparency = 0.5
