@@ -50,7 +50,7 @@ end
 RunService.Heartbeat:Connect(function()
 	for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
 		if player.Character then
-				local esp = character:FindFirstChild("ESP")
+				local esp = player.Character:FindFirstChild("ESP")
 				if esp then
 					esp.Enabled = esps.players
 				end
