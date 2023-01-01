@@ -44,7 +44,6 @@ local function addPlayerEsp(player)
 			highlight.FillTransparency = 0.5
 			highlight.FillColor = Color3.fromRGB(81,204,252)
 			highlight.Parent = player.Character
-			highlight.Adornee = player.Character
 		end
 	end)()
 end
