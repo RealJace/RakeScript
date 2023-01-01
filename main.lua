@@ -7,7 +7,7 @@ local player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("THE RAKE REMASTERED", "DarkTheme")
+local Window = Library.CreateLib("THE RAKE REMASTERED SCRIPT V2", "DarkTheme")
 
 -- Tabs
 local ESPs = Window:NewTab("ESP")
@@ -33,16 +33,19 @@ EntitiesSection:NewToggle("Rake","See where Rake is",function(state)
 	esps.rake = state
 end)
 
-local function addPlayerEsp(player: Player)
+local function addPlayerEsp(player)
 	coroutine.wrap(function()
 		player.CharacterAdded:Wait()
-		local highlight = Instance.new("Highlight")
-		highlight.OutlineTransparency = 0
-		highlight.OutlineColor = Color3.fromRGB(255,255,255)
-		highlight.FillTransparency = 0.5
-		highlight.FillColor = Color3.fromRGB(81,204,252)
-		highlight.Parent = player.Character
-		highlight.Adornee = player.Character
+		if not player.Character:FindFirstChild("ESPHighlight") then
+			local highlight = Instance.new("Highlight")
+			highlight.Name = "ESPHighlight"
+			highlight.OutlineTransparency = 0
+			highlight.OutlineColor = Color3.fromRGB(255,255,255)
+			highlight.FillTransparency = 0.5
+			highlight.FillColor = Color3.fromRGB(81,204,252)
+			highlight.Parent = player.Character
+			highlight.Adornee = player.Character
+		end
 	end)()
 end
 
@@ -52,6 +55,10 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
-for _,player: Player in ipairs(game:GetService("Players"):GetPlayers()) do
+game:GetService("Players").PlayerAdded:Connect(function(player)
+	addPlayerEsp(player)
+end)
+
+for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
 	addPlayerEsp(player)
 end
