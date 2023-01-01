@@ -48,17 +48,20 @@ local function addPlayerEsp(player)
 end
 
 RunService.Heartbeat:Connect(function()
-	if player.Character then
-		
+	for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
+		if player.Character then
+				local esp = character:FindFirstChild("ESP")
+				if esp then
+					esp.Enabled = esps.players
+				end
+		end
 	end
 end)
 
 game:GetService("Players").PlayerAdded:Connect(function(player)
-	print(player.Name)
 	addPlayerEsp(player)
 end)
 
 for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
-	print(player.Name)
 	addPlayerEsp(player)
 end
