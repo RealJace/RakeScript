@@ -54,12 +54,11 @@ RunService.Heartbeat:Connect(function()
 end)
 
 game:GetService("Players").PlayerAdded:Connect(function(player)
+	print(player.Name)
 	addPlayerEsp(player)
 end)
 
 for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
-	coroutine.wrap(function(plr)
-		print(plr.Name)
-		addPlayerEsp(plr)
-	end)(player)
+	print(player.Name)
+	addPlayerEsp(player)
 end
