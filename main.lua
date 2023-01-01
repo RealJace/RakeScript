@@ -34,18 +34,17 @@ EntitiesSection:NewToggle("Rake","See where Rake is",function(state)
 end)
 
 local function addPlayerEsp(player)
-	coroutine.wrap(function(plr)
-		plr.CharacterAdded:Wait()
-		if not plr.Character:FindFirstChild("ESP") then
-			local highlight = Instance.new("Highlight")
-			highlight.Name = "ESP"
-			highlight.OutlineTransparency = 0
-			highlight.OutlineColor = Color3.fromRGB(255,255,255)
-			highlight.FillTransparency = 0.5
-			highlight.FillColor = Color3.fromRGB(81,204,252)
-			highlight.Parent = plr.Character
-		end
-	end)(player)
+	local character = player.Character or plr.CharacterAdded:Wait()
+	if not character:FindFirstChild("ESP") then
+		local highlight = Instance.new("Highlight")
+		highlight.Name = "ESP"
+		highlight.OutlineTransparency = 0
+		highlight.OutlineColor = Color3.fromRGB(255,255,255)
+		highlight.FillTransparency = 0.5
+		highlight.FillColor = Color3.fromRGB(81,204,252)
+		highlight.Parent = character
+		highlight.Adornee = character
+	end
 end
 
 RunService.Heartbeat:Connect(function()
@@ -59,5 +58,8 @@ game:GetService("Players").PlayerAdded:Connect(function(player)
 end)
 
 for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
-	addPlayerEsp(player)
+	coroutine.wrap(function(plr)
+		print(plr.Name)
+		addPlayerEsp(plr)
+	end)(player)
 end
