@@ -35,7 +35,7 @@ end)
 
 local function addPlayerEsp(player)
 	task.spawn(function()
-		local character = player.Character or plr.CharacterAdded:Wait()
+		local character = player
 		if not character:FindFirstChild("ESP") then
 			local highlight = Instance.new("Highlight")
 			highlight.Name = "ESP"
@@ -60,10 +60,10 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
-game:GetService("Players").PlayerAdded:Connect(function(player)
-	addPlayerEsp(player)
-end)
+--workspace.ChildAdded
 
-for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
-	addPlayerEsp(player)
+for _,character in ipairs(workspace:GetChildren()) do
+	if game:GetService("Players"):GetPlayerFromCharacter(character) then
+		addPlayerEsp(character)
+	end
 end
