@@ -34,17 +34,19 @@ EntitiesSection:NewToggle("Rake","See where Rake is",function(state)
 end)
 
 local function addPlayerEsp(player)
-	local character = player.Character or plr.CharacterAdded:Wait()
-	if not character:FindFirstChild("ESP") then
-		local highlight = Instance.new("Highlight")
-		highlight.Name = "ESP"
-		highlight.OutlineTransparency = 0
-		highlight.OutlineColor = Color3.fromRGB(255,255,255)
-		highlight.FillTransparency = 0.5
-		highlight.FillColor = Color3.fromRGB(81,204,252)
-		highlight.Parent = character
-		highlight.Adornee = character
-	end
+	task.spawn(function()
+		local character = player.Character or plr.CharacterAdded:Wait()
+		if not character:FindFirstChild("ESP") then
+			local highlight = Instance.new("Highlight")
+			highlight.Name = "ESP"
+			highlight.OutlineTransparency = 0
+			highlight.OutlineColor = Color3.fromRGB(255,255,255)
+			highlight.FillTransparency = 0.5
+			highlight.FillColor = Color3.fromRGB(81,204,252)
+			highlight.Parent = character
+			highlight.Adornee = character
+		end	
+	end)
 end
 
 RunService.Heartbeat:Connect(function()
