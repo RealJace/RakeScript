@@ -59,35 +59,35 @@ local function addCharEsp(character,color)
 end
 
 RunService.RenderStepped:Connect(function()
-	for _,player in ipairs(game:GetService("Players"):GetPlayers()) do
-		if player.Character then
-				local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-				local head = player.Character:FindFirstChild("Head")
-				local esp = player.Character:FindFirstChild("ESP",true)
+	for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
+		if plr.Character then
+				local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
+				local head = plr.Character:FindFirstChild("Head")
+				local esp = plr.Character:FindFirstChild("ESP",true)
 				if esp then
 					esp.Enabled = esps.players
 				end
 				if esps.players then
 					
-					if not boxes[player.Character] then
-						boxes[player.Character] = {}
+					if not boxes[plr.Character] then
+						boxes[plr.Character] = {}
 					end
 					
-					if not boxes[player.Character].outline then
-						boxes[player.Character].outline = Drawing.new("Square")
-						boxes[player.Character].outline.Visible = false
-						boxes[player.Character].outline.Color = Color3.new(1,1,1)
-						boxes[player.Character].outline.Thickness = 3
-						boxes[player.Character].outline.Transparency = 1
-						boxes[player.Character].outline.Filled = false
+					if not boxes[plr.Character].outline then
+						boxes[plr.Character].outline = Drawing.new("Square")
+						boxes[plr.Character].outline.Visible = false
+						boxes[plr.Character].outline.Color = Color3.new(1,1,1)
+						boxes[plr.Character].outline.Thickness = 3
+						boxes[plr.Character].outline.Transparency = 1
+						boxes[plr.Character].outline.Filled = false
 					end
-					if not boxes[player.Character].fill then
-						boxes[player.Character].fill = Drawing.new("Square")
-						boxes[player.Character].fill.Visible = false
-						boxes[player.Character].fill.Color = Color3.new(1,1,1)
-						boxes[player.Character].fill.Thickness = 1
-						boxes[player.Character].fill.Transparency = 1
-						boxes[player.Character].fill.Filled = false
+					if not boxes[plr.Character].fill then
+						boxes[plr.Character].fill = Drawing.new("Square")
+						boxes[plr.Character].fill.Visible = false
+						boxes[plr.Character].fill.Color = Color3.new(1,1,1)
+						boxes[plr.Character].fill.Thickness = 1
+						boxes[plr.Character].fill.Transparency = 1
+						boxes[plr.Character].fill.Filled = false
 					end
 					
 					if hrp and head then
@@ -97,17 +97,15 @@ RunService.RenderStepped:Connect(function()
 						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
 						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff)
 						
-						boxes[player.Character].outline.Visible = onScreen
-						boxes[player.Character].fill.Visible = onScreen
-						if onScreen then
-							boxes[player.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-							boxes[player.Character].outline.Position = Vector2.new(rootPos.X - boxes[player.Character].outline.Size.X / 2,rootPos.Y - boxes[player.Character].outline.Size.Y / 2)
-							boxes[player.Character].fill.Size = boxes[player.Character].outline.Size
-							boxes[player.Character].fill.Position = boxes[player.Character].outline.Position
-						end
+						boxes[plr.Character].outline.Visible = true
+						boxes[plr.Character].fill.Visible = true
+						boxes[plr.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
+						boxes[plr.Character].outline.Position = Vector2.new(rootPos.X - boxes[plr.Character].outline.Size.X / 2,rootPos.Y - boxes[plr.Character].outline.Size.Y / 2)
+						boxes[plr.Character].fill.Size = boxes[plr.Character].outline.Size
+						boxes[plr.Character].fill.Position = boxes[plr.Character].outline.Position
 					else
-						boxes[player.Character].outline.Visible = false
-						boxes[player.Character].fill.Visible = false
+						boxes[plr.Character].outline.Visible = false
+						boxes[plr.Character].fill.Visible = false
 					end
 				end
 		end
@@ -149,14 +147,12 @@ RunService.RenderStepped:Connect(function()
 						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
 						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff)
 						
-						boxes[workspace.Rake].outline.Visible = onScreen
-						boxes[workspace.Rake].fill.Visible = onScreen
-						if onScreen then
-							boxes[workspace.Rake].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-							boxes[workspace.Rake].outline.Position = Vector2.new(rootPos.X - boxes[player.Character].outline.Size.X / 2,rootPos.Y - boxes[player.Character].outline.Size.Y / 2)
-							boxes[workspace.Rake].fill.Size = boxes[workspace.Rake].outline.Size
-							boxes[workspace.Rake].fill.Position = boxes[workspace.Rake].outline.Position
-						end
+						boxes[workspace.Rake].outline.Visible = true
+						boxes[workspace.Rake].fill.Visible = true
+						boxes[workspace.Rake].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
+						boxes[workspace.Rake].outline.Position = Vector2.new(rootPos.X - boxes[workspace.Rake].outline.Size.X / 2,rootPos.Y - boxes[workspace.Rake].outline.Size.Y / 2)
+						boxes[workspace.Rake].fill.Size = boxes[workspace.Rake].outline.Size
+						boxes[workspace.Rake].fill.Position = boxes[workspace.Rake].outline.Position
 					else
 						boxes[workspace.Rake].outline.Visible = false
 						boxes[workspace.Rake].fill.Visible = false
