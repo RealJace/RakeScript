@@ -156,6 +156,12 @@ MiscSection:NewButton("Full bright", "See everything and you don't need flashlig
     fullBright = true
 end)
 
+-- No stamina drain
+local noStaminaDrain = false
+
+MiscSection:NewToggle("No stamina drain","Prevent stamina from going down",function(state)
+	noStaminaDrain = state
+end)
 
 RunService.RenderStepped:Connect(function()
     for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
@@ -179,6 +185,18 @@ RunService.RenderStepped:Connect(function()
         local hum = player.Character:FindFirstChildWhichIsA("Humanoid")
         if hum then
             hum.WalkSpeed = walkSpeed
+        end
+    end
+
+    if noStaminaDrain then
+        for _,gui in ipairs(player.PlayerGui:GetChildren()) do
+            if gui.Name == "UI" then
+                local frame = gui:FindFirstChild("Frame")
+                if frame then
+                    local staminaFrame = frame:FindFirstChild("StaminaFrame")
+                    staminaFrame.Size = UDim2.fromScale(1, 1)
+                end
+            end
         end
     end
 end)
