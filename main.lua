@@ -96,14 +96,14 @@ local function addEsp(character,color,visible)
     local fill = boxes[character].fill
     local nameText = boxes[character].name
     
-    if rootPart and head then
+    if rootPart and head and outline and fill and nameText then
         local _,onScreen = camera:worldToViewportPoint(rootPart.Position)
         
         local rootPos,_ = camera:worldToViewportPoint(rootPart.Position)
         local headPos,headV = camera:worldToViewportPoint(head.Position + headOff)
         local legPos,legV = camera:worldToViewportPoint(rootPart.Position - legOff)
         
-        if visible ~= nil then
+        if visible == true then
             outline.Visible = (onScreen or headV or legV) or false
             fill.Visible = (onScreen or headV or legV) or false
             nameText.Visible = (onScreen or headV or legV) or false
@@ -118,9 +118,11 @@ local function addEsp(character,color,visible)
         fill.Position = outline.Position
         nameText.Position = outline.Position - Vector2.new(0,(outline.Size.Y / 2) + 1)
     else
-        outline.Visible = false
-        fill.Visible = false
-        nameText.Visible = false
+        if outline and fill and nameText then
+	    outline.Visible = false
+	    fill.Visible = false
+	    nameText.Visible = false
+	end
     end
 end
 
