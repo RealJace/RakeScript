@@ -103,8 +103,8 @@ RunService.RenderStepped:Connect(function()
 						if onScreen then
 							boxes[player.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
 							boxes[player.Character].outline.Position = Vector2.new(rootPos.X - boxes[player.Character].outline.Size.X / 2,rootPos.Y - boxes[player.Character].outline.Size.Y / 2)
-							boxes[player.Character].fill.Size = boxOutline.Size
-							boxes[player.Character].fill.Position = boxOutline.Position
+							boxes[player.Character].fill.Size = boxes[player.Character].outline.Size
+							boxes[player.Character].fill.Position = boxes[player.Character].outline.Position
 						end
 					else
 						boxes[player.Character].outline.Visible = false
@@ -155,8 +155,8 @@ RunService.RenderStepped:Connect(function()
 						if onScreen then
 							boxes[workspace.Rake].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
 							boxes[workspace.Rake].outline.Position = Vector2.new(rootPos.X - boxes[player.Character].outline.Size.X / 2,rootPos.Y - boxes[player.Character].outline.Size.Y / 2)
-							boxes[workspace.Rake].fill.Size = boxOutline.Size
-							boxes[workspace.Rake].fill.Position = boxOutline.Position
+							boxes[workspace.Rake].fill.Size = boxes[workspace.Rake].outline.Size
+							boxes[workspace.Rake].fill.Position = boxes[workspace.Rake].outline.Position
 						end
 					else
 						boxes[workspace.Rake].outline.Visible = false
