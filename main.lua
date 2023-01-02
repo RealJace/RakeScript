@@ -81,15 +81,15 @@ local function addEsp(character,color,visible)
         boxes[character].fill.Filled = false
     end
     if not boxes[character].name then
-        boxes[character].fill = Drawing.new("Text")
-        boxes[character].fill.Visible = false
-        boxes[character].fill.Color = color
-        boxes[character].fill.OutlineColor = Color3.fromRGB(0,0,0)
-        boxes[character].fill.Text = character.Name
-        boxes[character].fill.Outline = true
-        boxes[character].fill.Center = true
-        boxes[character].fill.Size = 12
-        boxes[character].fill.Font = 1
+        boxes[character].name = Drawing.new("Text")
+        boxes[character].name.Visible = false
+        boxes[character].name.Color = color
+        boxes[character].name.OutlineColor = Color3.fromRGB(0,0,0)
+        boxes[character].name.Text = character.Name
+        boxes[character].name.Outline = true
+        boxes[character].name.Center = true
+        boxes[character].name.Size = 12
+        boxes[character].name.Font = 1
     end
 
     local outline = boxes[character].outline
