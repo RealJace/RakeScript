@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 
-if game.PlaceId ~= 2413927524 then return end
+--if game.PlaceId ~= 2413927524 then return end
 
 local player = game:GetService("Players").LocalPlayer
 
