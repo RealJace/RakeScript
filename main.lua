@@ -33,7 +33,7 @@ EntitiesSection:NewToggle("Rake","See where Rake is",function(state)
 	esps.rake = state
 end)
 
-local function addPlayerEsp(character)
+local function addCharEsp(character,color)
 	if not character then return end
 	task.spawn(function()
 		if not character:FindFirstChild("ESP") then
@@ -42,8 +42,8 @@ local function addPlayerEsp(character)
 			highlight.OutlineTransparency = 0
 			highlight.OutlineColor = Color3.fromRGB(255,255,255)
 			highlight.FillTransparency = 0.5
-			highlight.FillColor = Color3.fromRGB(81,204,252)
-			highlight.Parent = character
+			highlight.FillColor = color or Color3.fromRGB(81,204,252)
+			highlight.Parent = character:FindFirstChild("HumanoidRootPart") or character
 			highlight.Adornee = character
 		end	
 	end)
@@ -58,16 +58,23 @@ RunService.Heartbeat:Connect(function()
 				end
 		end
 	end
+	if workspace:FindFirstChild("Rake") then
+		addCharEsp(workspace.Rake,Color3.fromRGB(255,0,0))
+		local esp = workspace.Rake:FindFirstChild("ESP")
+		if esp then
+			esp.Enabled = esps.rake
+		end
+	end
 end)
 
 workspace.ChildAdded:Connect(function(character)
 	if game:GetService("Players"):GetPlayerFromCharacter(character) then
-		addPlayerEsp(character)
+		addCharEsp(character)
 	end
 end)
 
 for _,character in ipairs(workspace:GetChildren()) do
 	if game:GetService("Players"):GetPlayerFromCharacter(character) then
-		addPlayerEsp(character)
+		addCharEsp(character)
 	end
 end
