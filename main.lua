@@ -36,14 +36,16 @@ end)
 local function addCharEsp(character,color)
 	if not character then return end
 	task.spawn(function()
-		if not character:FindFirstChild("ESP") then
+		local hrp = character:FindFirstChild("HumanoidRootPart")
+		if not hrp then return end
+		if not hrp:FindFirstChild("ESP") then
 			local highlight = Instance.new("Highlight")
 			highlight.Name = "ESP"
 			highlight.OutlineTransparency = 0
 			highlight.OutlineColor = Color3.fromRGB(255,255,255)
 			highlight.FillTransparency = 0.5
 			highlight.FillColor = color or Color3.fromRGB(81,204,252)
-			highlight.Parent = character:FindFirstChild("HumanoidRootPart") or character
+			highlight.Parent = hrp or character
 			highlight.Adornee = character
 		end	
 	end)
