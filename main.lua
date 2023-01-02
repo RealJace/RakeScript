@@ -194,7 +194,12 @@ RunService.RenderStepped:Connect(function()
                 local frame = gui:FindFirstChild("Frame")
                 if frame then
                     local staminaFrame = frame:FindFirstChild("StaminaFrame")
-                    staminaFrame.Size = UDim2.fromScale(1, 1)
+                    if staminaFrame then
+		        local bar = staminaFrame:FindFirstChild("Bar")
+			if bar then
+			   bar.Size = UDim2.fromScale(1, 1)
+			end
+		    end
                 end
             end
         end
