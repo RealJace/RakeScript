@@ -3,9 +3,6 @@
 local player = game:GetService("Players").LocalPlayer
 
 local camera = workspace.Camera
-local currentCamera = game:GetService("Workspace").CurrentCamera
-
-local worldToViewportPoint = currentCamera.worldToViewportPoint
 
 local headOff = Vector3.new(0,0.5,0)
 local legOff = Vector3.new(0,3,0)
@@ -22,6 +19,7 @@ local Misc = Window:NewTab("Misc")
 
 -- ESPs
 local EntitiesSection = ESPs:NewSection("Entities")
+local ObjectsSection = ESPs:NewSection("Objects")
 
 local esps = {
 	players = false,
@@ -41,135 +39,105 @@ EntitiesSection:NewToggle("Rake","See where Rake is",function(state)
 	esps.rake = state
 end)
 
-local function addCharEsp(character,color)
-	if not character then return end
-	task.spawn(function()
-		local hrp = character:FindFirstChild("HumanoidRootPart")
-		if not hrp then return end
-		if not hrp:FindFirstChild("ESP") then
-			local highlight = Instance.new("Highlight")
-			highlight.Name = "ESP"
-			highlight.OutlineTransparency = 0
-			highlight.OutlineColor = Color3.fromRGB(255,255,255)
-			highlight.FillTransparency = 0.5
-			highlight.FillColor = color or Color3.fromRGB(81,204,252)
-			highlight.Parent = hrp or character
-			highlight.Adornee = character
-		end	
-	end)
+ObjectsSection:NewToggle("Crates","See where crates are",function(state)
+	esps.crates = state
+end)
+
+ObjectsSection:NewToggle("Flare guns","See where flare guns are",function(state)
+	esps.flare_gun = state
+end)
+
+ObjectsSection:NewToggle("Scraps","See where scraps are",function(state)
+	esps.rake = state
+end)
+
+local function addEsp(character,color,visible)
+
+    if (not character) or (not color) then return end
+
+    local rootPart = character:FindFirstChild("HumanoidRootPart")
+    local head = character:FindFirstChild("Head")
+
+    if (not rootPart) or (not head) then return end
+
+    if not boxes[character] then
+        boxes[character] = {}
+    end
+    
+    if not boxes[character].outline then
+        boxes[character].outline = Drawing.new("Square")
+        boxes[character].outline.Visible = false
+        boxes[character].outline.Color = color
+        boxes[character].outline.Thickness = 3
+        boxes[character].outline.Transparency = 1
+        boxes[character].outline.Filled = false
+    end
+    if not boxes[character].fill then
+        boxes[character].fill = Drawing.new("Square")
+        boxes[character].fill.Visible = false
+        boxes[character].fill.Color = color
+        boxes[character].fill.Thickness = 1
+        boxes[character].fill.Transparency = 1
+        boxes[character].fill.Filled = false
+    end
+    if not boxes[character].name then
+        boxes[character].fill = Drawing.new("Text")
+        boxes[character].fill.Visible = false
+        boxes[character].fill.Color = color
+        boxes[character].fill.OutlineColor = Color3.fromRGB(0,0,0)
+        boxes[character].fill.Text = character.Name
+        boxes[character].fill.Outline = true
+        boxes[character].fill.Center = true
+        boxes[character].fill.Size = 12
+        boxes[character].fill.Font = 1
+    end
+
+    local outline = boxes[character].outline
+    local fill = boxes[character].fill
+    local nameText = boxes[character].name
+    
+    if rootPart and head then
+        local _,onScreen = camera:worldToViewportPoint(rootPart.Position)
+        
+        local rootPos,_ = camera:worldToViewportPoint(rootPart.Position)
+        local headPos,headV = camera:worldToViewportPoint(head.Position + headOff)
+        local legPos,legV = camera:worldToViewportPoint(rootPart.Position - legOff)
+        
+        if visible ~= nil then
+            outline.Visible = (onScreen or headV or legV) or false
+            fill.Visible = (onScreen or headV or legV) or false
+            nameText.Visible = (onScreen or headV or legV) or false
+        else
+            outline.Visible = visible
+            fill.Visible = visible
+            nameText.Visible = visible
+        end
+        outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
+        outline.Position = Vector2.new(rootPos.X - outline.Size.X / 2,rootPos.Y - outline.Size.Y / 2)
+        fill.Size = outline.Size
+        fill.Position = outline.Position
+        nameText.Position = outline.Position - Vector2.new(0,(outline.Size.Y / 2) + 1)
+    else
+        outline.Visible = false
+        fill.Visible = false
+        nameText.Visible = false
+    end
 end
 
 RunService.RenderStepped:Connect(function()
 	for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
-		if plr.Character then
-				local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
-				local head = plr.Character:FindFirstChild("Head")
-				local esp = plr.Character:FindFirstChild("ESP",true)
-				if esp then
-					esp.Enabled = esps.players
-				end
-				if esps.players then
-					
-					if not boxes[plr.Character] then
-						boxes[plr.Character] = {}
-					end
-					
-					if not boxes[plr.Character].outline then
-						boxes[plr.Character].outline = Drawing.new("Square")
-						boxes[plr.Character].outline.Visible = false
-						boxes[plr.Character].outline.Color = Color3.new(1,1,1)
-						boxes[plr.Character].outline.Thickness = 3
-						boxes[plr.Character].outline.Transparency = 1
-						boxes[plr.Character].outline.Filled = false
-					end
-					if not boxes[plr.Character].fill then
-						boxes[plr.Character].fill = Drawing.new("Square")
-						boxes[plr.Character].fill.Visible = false
-						boxes[plr.Character].fill.Color = Color3.new(1,1,1)
-						boxes[plr.Character].fill.Thickness = 1
-						boxes[plr.Character].fill.Transparency = 1
-						boxes[plr.Character].fill.Filled = false
-					end
-					
-					if hrp and head then
-						local pos1,onScreen = camera:worldToViewportPoint(hrp.Position)
-						
-						local rootPos,rootV = worldToViewportPoint(currentCamera,hrp.Position)
-						local headPos,headV = worldToViewportPoint(currentCamera,head.Position + headOff)
-						local legPos,legV = worldToViewportPoint(currentCamera,hrp.Position - legOff)
-						
-						boxes[plr.Character].outline.Visible = (onScreen or headV or legV) or false
-						boxes[plr.Character].fill.Visible = (onScreen or headV or legV) or false
-						boxes[plr.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-						boxes[plr.Character].outline.Position = Vector2.new(rootPos.X - boxes[plr.Character].outline.Size.X / 2,rootPos.Y - boxes[plr.Character].outline.Size.Y / 2)
-						boxes[plr.Character].fill.Size = boxes[plr.Character].outline.Size
-						boxes[plr.Character].fill.Position = boxes[plr.Character].outline.Position
-					else
-						boxes[plr.Character].outline.Visible = false
-						boxes[plr.Character].fill.Visible = false
-					end
-				end
-		end
+		addEsp(plr.Character,Color3.fromRGB(255,255,255),esps.players)
 	end
+    for i,v in ipairs(boxes) do
+        if i == nil and v then
+            for _,x in ipairs(v) do
+                x:Remove()
+            end
+        end
+    end
+
+    local rake = workspace:FindFirstChild("Rake")
 	if workspace:FindFirstChild("Rake") then
-		local hrp = workspace.Rake:FindFirstChild("HumanoidRootPart")
-		local head = workspace.Rake:FindFirstChild("Head")
-		addCharEsp(workspace.Rake,Color3.fromRGB(255,0,0))
-		local esp = workspace.Rake:FindFirstChild("ESP",true)
-		if esp then
-			esp.Enabled = esps.rake
-		end
-		if esps.rake then
-					if not boxes[workspace.Rake] then
-						boxes[workspace.Rake] = {}
-					end
-					
-					if not boxes[workspace.Rake].outline then
-						boxes[workspace.Rake].outline = Drawing.new("Square")
-						boxes[workspace.Rake].outline.Visible = false
-						boxes[workspace.Rake].outline.Color = Color3.new(1,0,0)
-						boxes[workspace.Rake].outline.Thickness = 3
-						boxes[workspace.Rake].outline.Transparency = 1
-						boxes[workspace.Rake].outline.Filled = false
-					end
-					if not boxes[workspace.Rake].fill then
-						boxes[workspace.Rake].fill = Drawing.new("Square")
-						boxes[workspace.Rake].fill.Visible = false
-						boxes[workspace.Rake].fill.Color = Color3.new(1,0,0)
-						boxes[workspace.Rake].fill.Thickness = 1
-						boxes[workspace.Rake].fill.Transparency = 1
-						boxes[workspace.Rake].fill.Filled = false
-					end
-					
-					if hrp and head then
-						local pos1,onScreen = camera:worldToViewportPoint(hrp.Position)
-						
-						local rootPos,rootV = worldToViewportPoint(currentCamera,hrp.Position)
-						local headPos,headV = worldToViewportPoint(currentCamera,head.Position + headOff)
-						local legPos,legV = worldToViewportPoint(currentCamera,hrp.Position - legOff)
-						
-						boxes[workspace.Rake].outline.Visible = (onScreen or headV or legV) or false
-						boxes[workspace.Rake].fill.Visible = (onScreen or headV or legV) or false
-						boxes[workspace.Rake].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-						boxes[workspace.Rake].outline.Position = Vector2.new(rootPos.X - boxes[workspace.Rake].outline.Size.X / 2,rootPos.Y - boxes[workspace.Rake].outline.Size.Y / 2)
-						boxes[workspace.Rake].fill.Size = boxes[workspace.Rake].outline.Size
-						boxes[workspace.Rake].fill.Position = boxes[workspace.Rake].outline.Position
-					else
-						boxes[workspace.Rake].outline.Visible = false
-						boxes[workspace.Rake].fill.Visible = false
-					end
-		end
+		addEsp(rake,Color3.fromRGB(255,0,0),esps.rake)
 	end
 end)
-
-workspace.ChildAdded:Connect(function(character)
-	if game:GetService("Players"):GetPlayerFromCharacter(character) then
-		addCharEsp(character)
-	end
-end)
-
-for _,character in ipairs(workspace:GetChildren()) do
-	if game:GetService("Players"):GetPlayerFromCharacter(character) then
-		addCharEsp(character)
-	end
-end
