@@ -94,11 +94,11 @@ RunService.RenderStepped:Connect(function()
 						local pos1,onScreen = camera:worldToViewportPoint(hrp.Position)
 						
 						local rootPos,rootV = worldToViewportPoint(currentCamera,hrp.Position)
-						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
-						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff)
+						local headPos,headV = worldToViewportPoint(currentCamera,head.Position + headOff)
+						local legPos,legV = worldToViewportPoint(currentCamera,hrp.Position - legOff)
 						
-						boxes[plr.Character].outline.Visible = true
-						boxes[plr.Character].fill.Visible = true
+						boxes[plr.Character].outline.Visible = onScreen or headV or legV
+						boxes[plr.Character].fill.Visible = onScreen or headV or legV
 						boxes[plr.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
 						boxes[plr.Character].outline.Position = Vector2.new(rootPos.X - boxes[plr.Character].outline.Size.X / 2,rootPos.Y - boxes[plr.Character].outline.Size.Y / 2)
 						boxes[plr.Character].fill.Size = boxes[plr.Character].outline.Size
@@ -144,11 +144,11 @@ RunService.RenderStepped:Connect(function()
 						local pos1,onScreen = camera:worldToViewportPoint(hrp.Position)
 						
 						local rootPos,rootV = worldToViewportPoint(currentCamera,hrp.Position)
-						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
-						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff)
+						local headPos,headV = worldToViewportPoint(currentCamera,head.Position + headOff)
+						local legPos,legV = worldToViewportPoint(currentCamera,hrp.Position - legOff)
 						
-						boxes[workspace.Rake].outline.Visible = true
-						boxes[workspace.Rake].fill.Visible = true
+						boxes[workspace.Rake].outline.Visible = onScreen or headV or legV
+						boxes[workspace.Rake].fill.Visible = onScreen or headV or legV
 						boxes[workspace.Rake].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
 						boxes[workspace.Rake].outline.Position = Vector2.new(rootPos.X - boxes[workspace.Rake].outline.Size.X / 2,rootPos.Y - boxes[workspace.Rake].outline.Size.Y / 2)
 						boxes[workspace.Rake].fill.Size = boxes[workspace.Rake].outline.Size
