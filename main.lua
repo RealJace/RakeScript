@@ -33,9 +33,9 @@ EntitiesSection:NewToggle("Rake","See where Rake is",function(state)
 	esps.rake = state
 end)
 
-local function addPlayerEsp(player)
+local function addPlayerEsp(character)
+	if not character then return end
 	task.spawn(function()
-		local character = player
 		if not character:FindFirstChild("ESP") then
 			local highlight = Instance.new("Highlight")
 			highlight.Name = "ESP"
@@ -60,7 +60,11 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
---workspace.ChildAdded
+workspace.ChildAdded:Connect(function(character)
+	if game:GetService("Players"):GetPlayerFromCharacter(character) then
+		addPlayerEsp(character)
+	end
+end)
 
 for _,character in ipairs(workspace:GetChildren()) do
 	if game:GetService("Players"):GetPlayerFromCharacter(character) then
