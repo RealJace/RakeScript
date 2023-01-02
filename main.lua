@@ -30,6 +30,7 @@ local esps = {
 }
 
 local boxes = {}
+local boxConnections = {}
 
 EntitiesSection:NewToggle("Players","See where players are",function(state)
 	esps.players = state
@@ -116,7 +117,7 @@ local function addEsp(character,color,visible)
         outline.Position = Vector2.new(rootPos.X - outline.Size.X / 2,rootPos.Y - outline.Size.Y / 2)
         fill.Size = outline.Size
         fill.Position = outline.Position
-        nameText.Position = outline.Position - Vector2.new(0,(outline.Size.Y / 2) + 1)
+        nameText.Position = outline.Position + Vector2.new(0,(outline.Size.Y / 2) + 1)
     else
         if outline and fill and nameText then
 	    outline.Visible = false
@@ -124,12 +125,22 @@ local function addEsp(character,color,visible)
 	    nameText.Visible = false
 	end
     end
+	
+    if not boxConnections[character] then
+	boxConnections[character] = character.Destroying:Connect(function()
+	    repeat wait() until outline and fill and nameText
+	    outline:Remove()
+	    fill:Remove()
+	    nameText:Remove()
+	    boxConnections[character]:Disconnect()
+	end)
+    end
 end
 
 RunService.RenderStepped:Connect(function()
-	for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
-		addEsp(plr.Character,Color3.fromRGB(255,255,255),esps.players)
-	end
+    for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
+	addEsp(plr.Character,Color3.fromRGB(255,255,255),esps.players)
+    end
     for i,v in ipairs(boxes) do
         if i == nil and v then
             for _,x in ipairs(v) do
@@ -139,7 +150,7 @@ RunService.RenderStepped:Connect(function()
     end
 
     local rake = workspace:FindFirstChild("Rake")
-	if workspace:FindFirstChild("Rake") then
-		addEsp(rake,Color3.fromRGB(255,0,0),esps.rake)
-	end
+    if workspace:FindFirstChild("Rake") then
+	addEsp(rake,Color3.fromRGB(255,0,0),esps.rake)
+    end
 end)
