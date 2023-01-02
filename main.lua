@@ -17,9 +17,13 @@ local ESPs = Window:NewTab("ESP")
 local HumanoidMods = Window:NewTab("Humanoid Mods")
 local Misc = Window:NewTab("Misc")
 
--- ESPs
+-- Sections
 local EntitiesSection = ESPs:NewSection("Entities")
 local ObjectsSection = ESPs:NewSection("Objects")
+local HumanoidSection = HumanoidMods:NewSection("Humanoid Modifiers")
+local MiscSection = Misc:NewSection("Misc stuff")
+
+-- ESP
 
 local esps = {
 	players = false,
@@ -139,8 +143,6 @@ end
 
 -- Speed
 
-local HumanoidSection = HumanoidMods:NewSection("Main")
-
 local walkSpeed = 16
 
 HumanoidSection:NewSlider("Speed", "Make you go fast", 33, 16, function(s)
@@ -148,7 +150,6 @@ HumanoidSection:NewSlider("Speed", "Make you go fast", 33, 16, function(s)
 end)
 
 -- Fullbright
-local MiscSection = Misc:NewSection("Main")
 local fullBright = false
 
 MiscSection:NewButton("Full bright", "See everything and you don't need flashlight!", function()
