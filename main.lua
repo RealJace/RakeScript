@@ -127,30 +127,57 @@ local function addEsp(character,color,visible)
     end
 	
     if not boxConnections[character] then
-	boxConnections[character] = character.Destroying:Connect(function()
-	    repeat wait() until outline and fill and nameText
-	    outline:Remove()
-	    fill:Remove()
-	    nameText:Remove()
-	    boxConnections[character]:Disconnect()
-	end)
+        boxConnections[character] = character.Destroying:Connect(function()
+            repeat wait() until outline and fill and nameText
+            outline:Remove()
+            fill:Remove()
+            nameText:Remove()
+            boxConnections[character]:Disconnect()
+        end)
     end
 end
 
+-- Speed
+
+local HumanoidSection = HumanoidMods:NewSection("Main")
+
+local walkSpeed = 16
+
+Section:NewSlider("Speed", "Make you go fast", 33, 16, function(s)
+    walkSpeed = s
+end)
+
+-- Fullbright
+local MiscSection = Misc:NewSection("Main")
+local fullBright = false
+
+MiscSection:NewButton("Full bright", "See everything and you don't need flashlight!", function()
+    fullBright = true
+end)
+
+
 RunService.RenderStepped:Connect(function()
     for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
-	addEsp(plr.Character,Color3.fromRGB(255,255,255),esps.players)
-    end
-    for i,v in ipairs(boxes) do
-        if i == nil and v then
-            for _,x in ipairs(v) do
-                x:Remove()
-            end
-        end
+	    addEsp(plr.Character,Color3.fromRGB(255,255,255),esps.players)
     end
 
     local rake = workspace:FindFirstChild("Rake")
     if workspace:FindFirstChild("Rake") then
-	addEsp(rake,Color3.fromRGB(255,0,0),esps.rake)
+	    addEsp(rake,Color3.fromRGB(255,0,0),esps.rake)
+    end
+
+    if fullBright then
+        game:GetService("Lighting").Brightness = 1
+        game:GetService("Lighting").ClockTime = 12
+        game:GetService("Lighting").FogEnd = 786543
+        game:GetService("Lighting").GlobalShadows = false
+        game:GetService("Lighting").Ambient = Color3.fromRGB(178,178,178)
+    end
+
+    if player.Character then
+        local hum = player.Character:FindFirstChildWhichIsA("Humanoid")
+        if hum then
+            hum.WalkSpeed = walkSpeed
+        end
     end
 end)
