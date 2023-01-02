@@ -143,7 +143,7 @@ local HumanoidSection = HumanoidMods:NewSection("Main")
 
 local walkSpeed = 16
 
-Section:NewSlider("Speed", "Make you go fast", 33, 16, function(s)
+HumanoidSection:NewSlider("Speed", "Make you go fast", 33, 16, function(s)
     walkSpeed = s
 end)
 
