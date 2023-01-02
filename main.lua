@@ -100,8 +100,8 @@ RunService.RenderStepped:Connect(function()
 						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
 						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff
 						
-						boxOutline.Visible = onScreen
-						box.Visible = onScreen
+						boxes[player.Character].outline.Visible = onScreen
+						boxes[player.Character].fill.Visible = onScreen
 						if onScreen then
 							boxes[player.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
 							boxes[player.Character].outline.Position = Vector2.new(rootPos.X - boxOutline.Size.X / 2,rootPos.Y - boxOutline.Size.Y / 2)
