@@ -33,6 +33,8 @@ local esps = {
 	scraps = false
 }
 
+local boxes = {}
+
 EntitiesSection:NewToggle("Players","See where players are",function(state)
 	esps.players = state
 end)
@@ -69,18 +71,28 @@ RunService.RenderStepped:Connect(function()
 					esp.Enabled = esps.players
 				end
 				if esps.players then
-					local boxOutline = Drawing.new("Square")
-					boxOutline.Visible = false
-					boxOutline.Color = Color3.new(0,0,0)
-					boxOutline.Thickness = 3
-					boxOutline.Transparency = 1
-					boxOutline.Filled = false
-					local box = Drawing.new("Square")
-					box.Visible = false
-					box.Color = Color3.new(1,1,1)
-					box.Thickness = 1
-					box.Transparency = 1
-					box.Filled = false
+					
+					if not boxes[player.Character] then
+						boxes[player.Character] = {}
+					end
+					
+					if not boxes[player.Character].outline then
+						boxes[player.Character].outline = Drawing.new("Square")
+						boxes[player.Character].outline.Visible = false
+						boxes[player.Character].outline.Color = Color3.new(0,0,0)
+						boxes[player.Character].outline.Thickness = 3
+						boxes[player.Character].outline.Transparency = 1
+						boxes[player.Character].outline.Filled = false
+					end
+					if not boxes[player.Character].fill then
+						boxes[player.Character].fill = Drawing.new("Square")
+						boxes[player.Character].fill.Visible = false
+						boxes[player.Character].fill.Color = Color3.new(1,1,1)
+						boxes[player.Character].fill.Thickness = 1
+						boxes[player.Character].fill.Transparency = 1
+						boxes[player.Character].fill.Filled = false
+					end
+					
 					if hrp and head then
 						local pos1,onScreen = camera:worldToViewportPoint(hrp.Position)
 						
@@ -91,10 +103,10 @@ RunService.RenderStepped:Connect(function()
 						boxOutline.Visible = onScreen
 						box.Visible = onScreen
 						if onScreen then
-							boxOutline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-							boxOutline.Position = Vector2.new(rootPos.X - boxOutline.Size.X / 2,rootPos.Y - boxOutline.Size.Y / 2)
-							box.Size = boxOutline.Size
-							box.Position = boxOutline.Position
+							boxes[player.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
+							boxes[player.Character].outline.Position = Vector2.new(rootPos.X - boxOutline.Size.X / 2,rootPos.Y - boxOutline.Size.Y / 2)
+							boxes[player.Character].fill.Size = boxOutline.Size
+							boxes[player.Character].fill.Position = boxOutline.Position
 						end
 					end
 				end
