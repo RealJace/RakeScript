@@ -77,7 +77,7 @@ RunService.RenderStepped:Connect(function()
 					if not boxes[player.Character].outline then
 						boxes[player.Character].outline = Drawing.new("Square")
 						boxes[player.Character].outline.Visible = false
-						boxes[player.Character].outline.Color = Color3.new(0,0,0)
+						boxes[player.Character].outline.Color = Color3.new(1,1,1)
 						boxes[player.Character].outline.Thickness = 3
 						boxes[player.Character].outline.Transparency = 1
 						boxes[player.Character].outline.Filled = false
@@ -96,25 +96,72 @@ RunService.RenderStepped:Connect(function()
 						
 						local rootPos,rootV = worldToViewportPoint(currentCamera,hrp.Position)
 						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
-						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff
+						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff)
 						
 						boxes[player.Character].outline.Visible = onScreen
 						boxes[player.Character].fill.Visible = onScreen
 						if onScreen then
 							boxes[player.Character].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-							boxes[player.Character].outline.Position = Vector2.new(rootPos.X - boxOutline.Size.X / 2,rootPos.Y - boxOutline.Size.Y / 2)
+							boxes[player.Character].outline.Position = Vector2.new(rootPos.X - boxes[player.Character].outline.Size.X / 2,rootPos.Y - boxes[player.Character].outline.Size.Y / 2)
 							boxes[player.Character].fill.Size = boxOutline.Size
 							boxes[player.Character].fill.Position = boxOutline.Position
 						end
+					else
+						boxes[player.Character].outline.Visible = false
+						boxes[player.Character].fill.Visible = false
 					end
 				end
 		end
 	end
 	if workspace:FindFirstChild("Rake") then
+		local hrp = workspace.Rake:FindFirstChild("HumanoidRootPart")
+		local head = workspace.Rake:FindFirstChild("Head")
 		addCharEsp(workspace.Rake,Color3.fromRGB(255,0,0))
-		local esp = workspace.Rake:FindFirstChild("ESP")
+		local esp = workspace.Rake:FindFirstChild("ESP",true)
 		if esp then
 			esp.Enabled = esps.rake
+		end
+		if esps.rake then
+					if not boxes[workspace.Rake] then
+						boxes[workspace.Rake] = {}
+					end
+					
+					if not boxes[workspace.Rake].outline then
+						boxes[workspace.Rake].outline = Drawing.new("Square")
+						boxes[workspace.Rake].outline.Visible = false
+						boxes[workspace.Rake].outline.Color = Color3.new(1,0,0)
+						boxes[workspace.Rake].outline.Thickness = 3
+						boxes[workspace.Rake].outline.Transparency = 1
+						boxes[workspace.Rake].outline.Filled = false
+					end
+					if not boxes[workspace.Rake].fill then
+						boxes[workspace.Rake].fill = Drawing.new("Square")
+						boxes[workspace.Rake].fill.Visible = false
+						boxes[workspace.Rake].fill.Color = Color3.new(1,0,0)
+						boxes[workspace.Rake].fill.Thickness = 1
+						boxes[workspace.Rake].fill.Transparency = 1
+						boxes[workspace.Rake].fill.Filled = false
+					end
+					
+					if hrp and head then
+						local pos1,onScreen = camera:worldToViewportPoint(hrp.Position)
+						
+						local rootPos,rootV = worldToViewportPoint(currentCamera,hrp.Position)
+						local headPos = worldToViewportPoint(currentCamera,head.Position + headOff)
+						local legPos = worldToViewportPoint(currentCamera,hrp.Position - legOff)
+						
+						boxes[workspace.Rake].outline.Visible = onScreen
+						boxes[workspace.Rake].fill.Visible = onScreen
+						if onScreen then
+							boxes[workspace.Rake].outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
+							boxes[workspace.Rake].outline.Position = Vector2.new(rootPos.X - boxes[player.Character].outline.Size.X / 2,rootPos.Y - boxes[player.Character].outline.Size.Y / 2)
+							boxes[workspace.Rake].fill.Size = boxOutline.Size
+							boxes[workspace.Rake].fill.Position = boxOutline.Position
+						end
+					else
+						boxes[workspace.Rake].outline.Visible = false
+						boxes[workspace.Rake].fill.Visible = false
+					end
 		end
 	end
 end)
