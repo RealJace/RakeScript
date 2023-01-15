@@ -93,7 +93,7 @@ local function addEsp(characterName,color,visible)
             currentBox.Visible = visible
         end
         currentBox.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-        currentBox.Position = Vector2.new(rootPos.X - outline.Size.X / 2,rootPos.Y - outline.Size.Y / 2)
+        currentBox.Position = Vector2.new(rootPos.X - currentBox.Size.X / 2,rootPos.Y - currentBox.Size.Y / 2)
     else
         if currentBox then
 	    currentBox.Visible = false
