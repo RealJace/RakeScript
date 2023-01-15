@@ -56,7 +56,13 @@ ObjectsSection:NewToggle("Scraps","See where scraps are",function(state)
 	esps.rake = state
 end)
 
-local function addEsp(character,color,visible)
+local function addEsp(characterName,color,visible)
+
+    local character = workspace:FindFirstChild(characterName)
+	
+    if not character and boxes[characterName] then
+	boxes[character]:Remove()
+    end
 
     if (not character) or (not color) then return end
 
@@ -65,43 +71,16 @@ local function addEsp(character,color,visible)
 
     if (not rootPart) or (not head) then return end
 
-    if not boxes[character] then
-        boxes[character] = {}
+    if not boxes[characterName] then
+        boxes[characterName] = Drawing.new("Square")
+	boxes[characterName].Thickness = 3
+	boxes[characterName].Filled = false
+	boxes[characterName].Color = color or Color3.new(1,1,1)
+	boxes[characterName].Transparency = 0
     end
+    local currentBox = boxes[characterName]
     
-    if not boxes[character].outline then
-        boxes[character].outline = Drawing.new("Square")
-        boxes[character].outline.Visible = false
-        boxes[character].outline.Color = color
-        boxes[character].outline.Thickness = 3
-        boxes[character].outline.Transparency = 1
-        boxes[character].outline.Filled = false
-    end
-    if not boxes[character].fill then
-        boxes[character].fill = Drawing.new("Square")
-        boxes[character].fill.Visible = false
-        boxes[character].fill.Color = color
-        boxes[character].fill.Thickness = 1
-        boxes[character].fill.Transparency = 1
-        boxes[character].fill.Filled = false
-    end
-    if not boxes[character].name then
-        boxes[character].name = Drawing.new("Text")
-        boxes[character].name.Visible = false
-        boxes[character].name.Color = color
-        boxes[character].name.OutlineColor = Color3.fromRGB(0,0,0)
-        boxes[character].name.Text = character.Name
-        boxes[character].name.Outline = true
-        boxes[character].name.Center = true
-        boxes[character].name.Size = 12
-        boxes[character].name.Font = 1
-    end
-
-    local outline = boxes[character].outline
-    local fill = boxes[character].fill
-    local nameText = boxes[character].name
-    
-    if rootPart and head and outline and fill and nameText then
+    if rootPart and head and currentBox then
         local _,onScreen = camera:worldToViewportPoint(rootPart.Position)
         
         local rootPos,_ = camera:worldToViewportPoint(rootPart.Position)
@@ -109,35 +88,16 @@ local function addEsp(character,color,visible)
         local legPos,legV = camera:worldToViewportPoint(rootPart.Position - legOff)
         
         if visible == true then
-            outline.Visible = (onScreen or headV or legV) or false
-            fill.Visible = (onScreen or headV or legV) or false
-            nameText.Visible = (onScreen or headV or legV) or false
+            currentBox.Visible = (onScreen or headV or legV) or false
         else
-            outline.Visible = visible
-            fill.Visible = visible
-            nameText.Visible = visible
+            currentBox.Visible = visible
         end
-        outline.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
-        outline.Position = Vector2.new(rootPos.X - outline.Size.X / 2,rootPos.Y - outline.Size.Y / 2)
-        fill.Size = outline.Size
-        fill.Position = outline.Position
-        nameText.Position = outline.Position + Vector2.new(0,(outline.Size.Y / 2) + 1)
+        currentBox.Size = Vector2.new(1000 / rootPos.Z,headPos.Y - legPos.Y)
+        currentBox.Position = Vector2.new(rootPos.X - outline.Size.X / 2,rootPos.Y - outline.Size.Y / 2)
     else
-        if outline and fill and nameText then
-	    outline.Visible = false
-	    fill.Visible = false
-	    nameText.Visible = false
+        if currentBox then
+	    currentBox.Visible = false
 	end
-    end
-	
-    if not boxConnections[character] then
-        boxConnections[character] = character.Destroying:Connect(function()
-            repeat wait() until outline and fill and nameText
-            outline:Remove()
-            fill:Remove()
-            nameText:Remove()
-            boxConnections[character]:Disconnect()
-        end)
     end
 end
 
@@ -165,13 +125,10 @@ end)
 
 RunService.RenderStepped:Connect(function()
     for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
-	    addEsp(plr.Character,Color3.fromRGB(255,255,255),esps.players)
+	    addEsp(plr.Name,Color3.fromRGB(255,255,255),esps.players)
     end
 
-    local rake = workspace:FindFirstChild("Rake")
-    if workspace:FindFirstChild("Rake") then
-	    addEsp(rake,Color3.fromRGB(255,0,0),esps.rake)
-    end
+    addEsp("Rake",Color3.fromRGB(255,0,0),esps.rake)
 
     if fullBright then
         game:GetService("Lighting").Brightness = 1
